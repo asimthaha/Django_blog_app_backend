@@ -38,8 +38,9 @@ def displayView(request):
 @csrf_exempt
 def displayMyView(request):
     if request.method == "POST":
-        recieved_data = json.loads(request.body)
-        getUserid = recieved_data["userid"]
+        # recieved_data = json.loads(request.body)
+        # getUserid = recieved_data["userid"]
+        getUserid = 59
         data = BlogAddModel.objects.filter(Q(userid__icontains=getUserid)).values()
         myPost = list(data)
         return HttpResponse(json.dumps(myPost))
