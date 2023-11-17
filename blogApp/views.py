@@ -16,7 +16,8 @@ def addView(request):
         if serializer_data.is_valid():
             serializer_data.save()
             return HttpResponse(json.dumps({"status":"Blog App data Addded Successfully"}))
-        return HttpResponse(json.dumps({"status":"Blog App data Adding Unsuccessful"}))
+        else:
+            return HttpResponse(json.dumps({"status":"Blog App data Adding Unsuccessful"}))
     
 @csrf_exempt
 def searchView(request):
