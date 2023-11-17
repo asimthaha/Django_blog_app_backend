@@ -28,3 +28,18 @@ def searchView(request):
         return HttpResponse(json.dumps(searchData))
     
 
+@csrf_exempt
+def displayView(request):
+    if request.method =="POST":
+        data = BlogAddModel.objects.all()
+        serializer_data = BlogSerializer(data, many=True)
+        return HttpResponse(json.dumps(serializer_data.data))
+    
+@csrf_exempt
+def displayMyView(request):
+    if request.method == "POST":
+        recieved_data = json.loads(request.body)
+        getUserid = recieved_data["userid"]
+        data = BlogAddModel.objects.filter(Q(userid__icontains=getUserid)).values()
+        myPost = list(data)
+        return HttpResponse(json.dumps(myPost))
