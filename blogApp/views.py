@@ -16,7 +16,8 @@ def addView(request):
         if serializer_data.is_valid():
             serializer_data.save()
             return HttpResponse(json.dumps({"status":"Blog App data Addded Successfully"}))
-        return HttpResponse(json.dumps({"status":"Blog App data Adding Unsuccessful"}))
+        else:
+            return HttpResponse(json.dumps({"status":"Blog App data Adding Unsuccessful"}))
     
 @csrf_exempt
 def searchView(request):
@@ -40,8 +41,7 @@ def displayMyView(request):
     if request.method == "POST":
         # recieved_data = json.loads(request.body)
         # getUserid = recieved_data["userid"]
-        # getUserid = 59
-        data = BlogAddModel.objects.filter(userid=request.userid)
-        serializer_data = BlogSerializer(data, many=True)
-        # myPost = list(data)
-        return HttpResponse(json.dumps(serializer_data.data))
+        getUserid = 59
+        data = BlogAddModel.objects.filter(Q(userid__icontains=getUserid)).values()
+        myPost = list(data)
+        return HttpResponse(json.dumps(myPost))
