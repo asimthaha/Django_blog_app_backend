@@ -6,4 +6,6 @@ urlpatterns = [
     path('search/', views.searchView, name="search"),
     path('view/', views.displayView, name="view"),
     path('viewMy/', views.displayMyView, name="viewMy"),
+    path('deleteMy/', views.deleteView, name="deleteMy"),
+    path('updateMy/', views.updateView, name="updateMy"),
 ]

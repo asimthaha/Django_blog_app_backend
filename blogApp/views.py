@@ -39,9 +39,27 @@ def displayView(request):
 @csrf_exempt
 def displayMyView(request):
     if request.method == "POST":
-        # recieved_data = json.loads(request.body)
-        # getUserid = recieved_data["userid"]
-        getUserid = 59
-        data = BlogAddModel.objects.filter(Q(userid__icontains=getUserid)).values()
+        recieved_data = json.loads(request.body)
+        getUserid = recieved_data["userid"]
+        data = BlogAddModel.objects.filter(Q(userid=getUserid)).values()
         myPost = list(data)
         return HttpResponse(json.dumps(myPost))
+    
+@csrf_exempt
+def deleteView(request):
+    if request.method == "POST":
+        recieved_data = json.loads(request.body)
+        getTitle = recieved_data["title"]
+        data = BlogAddModel.objects.filter(Q(title__exact=getTitle)).delete()
+        return HttpResponse(json.dumps({"status":"Post Deleted"}))
+    
+@csrf_exempt
+def updateView(request):
+    if request.method == "POST":
+        recieved_data = json.loads(request.body)
+        getId = recieved_data["id"]
+        getUserid = recieved_data["userid"]
+        getTitle = recieved_data["title"]
+        getPost = recieved_data["post"]
+        data = BlogAddModel.objects.filter(Q(userid__exact=getUserid) & Q(id__exact=getId)).update(post=getPost,title= getTitle)
+        return HttpResponse(json.dumps({"status":"Post Updated"}))

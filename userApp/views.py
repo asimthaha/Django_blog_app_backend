@@ -8,7 +8,7 @@ from django.db.models import Q
 
 # Create your views here.
 @csrf_exempt
-def addView(request):
+def registerView(request):
     if request.method == "POST":
         data = json.loads(request.body)
         print(data)
@@ -20,8 +20,21 @@ def addView(request):
             return HttpResponse(json.dumps({"status":"User data Adding Unsuccessful"}))
         
 @csrf_exempt
-def displayView(request):
+def displayUserView(request):
     if request.method =="POST":
-        data = UserAddModel.objects.all()
-        serializer_data = UserSerializer(data, many=True)
-        return HttpResponse(json.dumps(serializer_data.data))
+        data= json.loads(request.body)
+        getId = data['id']
+        data = UserAddModel.objects.filter(Q(id__exact=getId)).values()
+        data = list(data)
+        return HttpResponse(json.dumps(data))
+    
+@csrf_exempt
+def LoginView(request):
+    if request.method=="POST":
+        data = json.loads(request.body)
+        getEmail = data['email']
+        getPassword = data['password']
+        loginData = UserAddModel.objects.filter(Q(email__exact=getEmail) & Q(password__exact = getPassword)).values()
+        loginData = list(loginData)
+        return HttpResponse(json.dumps(loginData))
+        

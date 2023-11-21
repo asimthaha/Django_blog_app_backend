@@ -4,7 +4,7 @@ from django.db import models
 class BlogAddModel(models.Model):
     """Model definition for BlogAddModel."""
 
-    userid = models.CharField(max_length=100,default="")
+    userid = models.IntegerField()
     title = models.CharField(max_length=100,default="")
     post = models.CharField(max_length=100,default="")
     
