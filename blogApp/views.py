@@ -47,19 +47,34 @@ def displayMyView(request):
     
 @csrf_exempt
 def deleteView(request):
-    if request.method == "POST":
+    if request.method == "DELETE":
+        recieved_id = request.GET.get('id') 
+        getId = (int(recieved_id))
+        if getId is not None:
+            try:
+                data = BlogAddModel.objects.filter(Q(id__exact=getId))   
+            except BlogAddModel.DoesNotExist:
+                return HttpResponse(json.dumps({"status":"Post not Found"}))  
+            data.delete()
+            return HttpResponse(json.dumps({"status":"Deleted Successfully"}))
+        
+@csrf_exempt
+def displayUpdateView(request):
+    if request.method =="POST":
         recieved_data = json.loads(request.body)
-        getTitle = recieved_data["title"]
-        data = BlogAddModel.objects.filter(Q(title__exact=getTitle)).delete()
-        return HttpResponse(json.dumps({"status":"Post Deleted"}))
+        getUserid = recieved_data["userid"]
+        getId = recieved_data["id"]
+        data = BlogAddModel.objects.filter(Q(userid__exact=getUserid) & Q(id__exact=getId)).values()
+        myPost = list(data)
+        return HttpResponse(json.dumps(myPost))
     
 @csrf_exempt
 def updateView(request):
-    if request.method == "POST":
+    if request.method == "PUT":      
         recieved_data = json.loads(request.body)
         getId = recieved_data["id"]
         getUserid = recieved_data["userid"]
         getTitle = recieved_data["title"]
         getPost = recieved_data["post"]
         data = BlogAddModel.objects.filter(Q(userid__exact=getUserid) & Q(id__exact=getId)).update(post=getPost,title= getTitle)
-        return HttpResponse(json.dumps({"status":"Post Updated"}))
+        return HttpResponse(json.dumps({"status":"Post Updated Successfully"}))
